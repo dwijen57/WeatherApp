@@ -8,17 +8,18 @@ import CoreLocation
 import UIKit
 import MapKit
 
-class ViewController: UIViewController, CLLocationManagerDelegate  {
+class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate  {
 
     @IBOutlet weak var MapView: MKMapView!
     
     let locationManager = CLLocationManager()
     var c = ""
     var f = ""
-    var temperature = ""
+    var temperature:Float = 0.0
     var condition = ""
     var latitude = 0.0
     var longitude = 0.0
+    var code = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,9 +28,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate  {
         locationManager.requestLocation()
         
         addAnnotation(location: CLLocation(latitude: latitude, longitude: longitude))
-        // Do any additional setup after loading the view.
-//        addAnnotation(location: )
-     
         
     }
     
@@ -51,6 +49,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate  {
     
     private func setupMap(){
         MapView.delegate = self
+        
+        
         let location = CLLocation(latitude: latitude, longitude:longitude)
         let radiusInMeters: CLLocationDistance = 1000
         
@@ -63,7 +63,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate  {
     
     private func addAnnotation(location: CLLocation){
 
-        let annotation = MyAnnotation(coordinate: location.coordinate, title: temperature , subtitle: condition  )
+        let annotation = MyAnnotation(coordinate: location.coordinate, title: "\(temperature) ℃" , subtitle: condition  )
 
         MapView.addAnnotation(annotation)
     }
@@ -78,6 +78,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate  {
         }
         
         let session = URLSession.shared
+        
         
         let dataTask = session.dataTask(with: url) { data, response, error in
             print("Network call complete")
@@ -104,25 +105,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate  {
                     self.c = "\(weatherResponse.current.temp_c)C"
                     self.f = "\(weatherResponse.current.temp_f)F"
 
-                    self.temperature = "\(weatherResponse.current.temp_c)C"
+                    self.temperature = weatherResponse.current.temp_c
                     self.condition = "\(weatherResponse.current.condition.text)"
                     self.addAnnotation(location: CLLocation(latitude: weatherResponse.location.lat, longitude: weatherResponse.location.lon))
                     self.longitude = weatherResponse.location.lon
                     self.latitude = weatherResponse.location.lat
-
                     
-//                    if (weatherResponse.current.condition.code == 1000){
-//                        self.weatherConditionImage.image = UIImage(systemName: "sun.min")
-//                    }
-//                    else if(weatherResponse.current.condition.code == 1003){
-//                        self.weatherConditionImage.image = UIImage(systemName: "cloud")
-//                    }
-//                    else if(weatherResponse.current.condition.code == 1006){
-//                        self.weatherConditionImage.image = UIImage(systemName: "cloud.fill")
-//                    }
-//                    else if(weatherResponse.current.condition.code == 1009){
-//                        self.weatherConditionImage.image = UIImage(systemName: "")
-//                    }
+                    self.code = weatherResponse.current.condition.code
+
                     
                     
                 }
@@ -131,6 +121,95 @@ class ViewController: UIViewController, CLLocationManagerDelegate  {
     
         }
         dataTask.resume()
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let identifier = "what is this"
+        let view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        view.canShowCallout = true
+        
+//        let image = UIImage()
+        view.leftCalloutAccessoryView = UIImageView(image: showImage(code: code))
+        view.markerTintColor = UIColor.blue
+       
+        
+        func showImage(code: Int)->UIImage
+        {
+            switch code{
+            case 1000:
+                return UIImage(systemName: "sun.max.fill")!
+            case 1003:
+                return UIImage(systemName: "cloud.sun.fill")!
+            case 1006:
+                return UIImage(systemName: "cloud.fill")!
+            case 1009:
+                return UIImage(systemName: "cloud.circle")!
+            case 1030:
+                return UIImage(systemName: "smoke.fill")!
+            case 1063:
+                return UIImage(systemName: "cloud.drizzle")!
+            case 1066:
+                return UIImage(systemName: "cloud.snow")!
+            case 1069:
+                return UIImage(systemName: "cloud.sleet")!
+            case 1072:
+                return UIImage(systemName: "cloud.sleet.fill")!
+            case 1087:
+                return UIImage(systemName: "cloud.bolt")!
+            case 1114:
+                return UIImage(systemName: "wind.snow")!
+            case 1117:
+                return UIImage(systemName: "snowflake")!
+            case 1135:
+                return UIImage(systemName: "cloud.fog")!
+            
+            
+                
+            default:
+                print("default")
+                return UIImage(systemName: "graduationcap.circle.fill")!
+            }
+        }
+        
+        
+        view.calloutOffset = CGPoint(x: 0, y: 10)
+        //button on right
+        let button = UIButton(type: .detailDisclosure)
+        view.rightCalloutAccessoryView = button
+        
+        //image on right
+        
+        
+        
+        //color change
+            
+            if(temperature < 0 )
+            {
+                view.markerTintColor = UIColor.systemPurple
+            }
+            else if(temperature > 0 && temperature < 12){
+                view.markerTintColor = UIColor.systemBlue
+            }
+            else if(temperature > 11 && temperature < 16){
+                view.markerTintColor = UIColor.blue
+            }
+            else if(temperature > 15 && temperature < 25){
+                view.markerTintColor = UIColor.systemOrange
+            }
+            else if(temperature > 24 && temperature < 31){
+                view.markerTintColor = UIColor.systemRed
+            }
+            else if(temperature > 31){
+                view.markerTintColor = UIColor.red
+            }
+            else{
+                print("else")
+            }
+        
+//        view.markerTintColor = UIColor.blue
+        
+        
+        return view
     }
     
     
@@ -162,10 +241,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate  {
 
 }
 
-extension ViewController: MKMapViewDelegate{
-    
-}
-
 
 class MyAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
@@ -186,6 +261,7 @@ class MyAnnotation: NSObject, MKAnnotation {
 struct WeatherResponse: Decodable{
     let location: Location
     let current: Current
+    
 }
 
 struct Location: Decodable{

@@ -21,6 +21,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="418"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="715-aH-4by">
+                                <rect key="frame" x="0.0" y="782" width="393" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="EuM-Uj-ix2"/>
+                                    <barButtonItem systemItem="add" id="d6w-Ee-Qg2"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
