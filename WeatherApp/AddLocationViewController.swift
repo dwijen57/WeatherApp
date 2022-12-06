@@ -23,6 +23,8 @@ class AddLocationViewController: UIViewController, UITextFieldDelegate, CLLocati
     @IBOutlet weak var locationLabel: UILabel!
     var celcius = ""
     var farenheit = ""
+    var locationName = ""
+    
     
     private let locationManager = CLLocationManager()
     
@@ -37,11 +39,37 @@ class AddLocationViewController: UIViewController, UITextFieldDelegate, CLLocati
     }
     
     @IBAction func cancelButton(_ sender: UIButton) {
+        dismiss(animated: true)
     }
     
     @IBAction func saveButton(_ sender: UIButton) {
+//        self.locationName = locationLabel.text!
+//        performSegue(withIdentifier: "addLocScreen", sender: self)
+        
+        
+        
+        if (locationLabel.text == "Location")
+        {
+            dismiss(animated: true)
+            return
+        }
+        
+        else{
+            if let delegate = self.presentingViewController as? ViewController
+                    {
+                       delegate.loadWeather(search: locationLabel.text!)
+                dismiss(animated: true)
+                   }
+            
+        }
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! ViewController
+        vc.listName = self.locationName
+    }
+    
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
@@ -96,7 +124,7 @@ class AddLocationViewController: UIViewController, UITextFieldDelegate, CLLocati
     }
     
     
-     public func loadWeather(search: String?){
+      func loadWeather(search: String?){
         guard let search = search else{
             return
         }
@@ -145,17 +173,41 @@ class AddLocationViewController: UIViewController, UITextFieldDelegate, CLLocati
                     
 
                     
-                    if (weatherResponse.current.condition.code == 1000){
-                        self.weatherConditionImage.image = UIImage(systemName: "sun.min")
-                    }
-                    else if(weatherResponse.current.condition.code == 1003){
-                        self.weatherConditionImage.image = UIImage(systemName: "cloud")
-                    }
-                    else if(weatherResponse.current.condition.code == 1006){
-                        self.weatherConditionImage.image = UIImage(systemName: "cloud.fill")
-                    }
-                    else if(weatherResponse.current.condition.code == 1009){
-                        self.weatherConditionImage.image = UIImage(systemName: "")
+                    switch weatherResponse.current.condition.code{
+                    case 1000:
+                        return self.weatherConditionImage.image = UIImage(systemName: "sun.max.fill")!
+                    case 1003:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.sun.fill")!
+                    case 1006:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.fill")!
+                    case 1009:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.circle")!
+                    case 1030:
+                        return self.weatherConditionImage.image = UIImage(systemName: "smoke.fill")!
+                    case 1063:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.drizzle")!
+                    case 1066:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.snow")!
+                    case 1069:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.sleet")!
+                    case 1072:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.sleet.fill")!
+                    case 1087:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.bolt")!
+                    case 1114:
+                        return self.weatherConditionImage.image = UIImage(systemName: "wind.snow")!
+                    case 1117:
+                        return self.weatherConditionImage.image = UIImage(systemName: "snowflake")!
+                    case 1135:
+                        return self.weatherConditionImage.image = UIImage(systemName: "cloud.fog")!
+                    case 1213:
+                        return self.weatherConditionImage.image = UIImage(systemName: "snowflake")!
+                    
+                    
+                        
+                    default:
+                        print("default")
+                        return self.weatherConditionImage.image = UIImage(systemName: "graduationcap.circle.fill")!
                     }
                     
                     
@@ -194,6 +246,29 @@ class AddLocationViewController: UIViewController, UITextFieldDelegate, CLLocati
         return weather
     }
     
-        
+    struct WeatherResponse: Decodable{
+        let location: Location
+        let current: Current
+    }
+
+    struct Location: Decodable{
+        let name: String
+        let lat: Double
+        let lon: Double
+    }
+
+    struct Current : Decodable{
+        let temp_c: Float
+        let temp_f: Float
+        let condition: Condition
+    }
+
+    struct Condition: Decodable{
+        let text: String
+        let code: Int
+    }
 }
+
+
+
 
