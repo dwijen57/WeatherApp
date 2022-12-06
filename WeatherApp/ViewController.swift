@@ -46,6 +46,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
        }
     
 
+    @IBAction func addLocationSeague(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier:"addLocScreen", sender: self)
+    }
     
     private func setupMap(){
         MapView.delegate = self
@@ -131,7 +134,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
 //        let image = UIImage()
         view.leftCalloutAccessoryView = UIImageView(image: showImage(code: code))
         view.markerTintColor = UIColor.blue
-       
+        
+        //image on right
         
         func showImage(code: Int)->UIImage
         {
@@ -175,9 +179,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         view.calloutOffset = CGPoint(x: 0, y: 10)
         //button on right
         let button = UIButton(type: .detailDisclosure)
-        view.rightCalloutAccessoryView = button
         
-        //image on right
+        view.rightCalloutAccessoryView = button
         
         
         
@@ -206,12 +209,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                 print("else")
             }
         
-//        view.markerTintColor = UIColor.blue
-        
-        
         return view
     }
     
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        performSegue(withIdentifier: "detailScreen", sender: self)
+    }
     
     
     private func getURL(query: String) -> URL? {
@@ -252,8 +255,6 @@ class MyAnnotation: NSObject, MKAnnotation {
         self.subtitle = subtitle
         super.init()
     }
-
-
 }
 
 

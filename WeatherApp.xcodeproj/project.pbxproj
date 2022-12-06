@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F65664B293ED33F00990969 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F65664A293ED33F00990969 /* DetailViewController.swift */; };
+		3F65664D293ED35300990969 /* AddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F65664C293ED35300990969 /* AddLocationViewController.swift */; };
 		3F98A24C293D33EF009FACAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F98A24B293D33EF009FACAB /* AppDelegate.swift */; };
 		3F98A24E293D33EF009FACAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F98A24D293D33EF009FACAB /* SceneDelegate.swift */; };
 		3F98A250293D33EF009FACAB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F98A24F293D33EF009FACAB /* ViewController.swift */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F65664A293ED33F00990969 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		3F65664C293ED35300990969 /* AddLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationViewController.swift; sourceTree = "<group>"; };
 		3F98A248293D33EF009FACAB /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F98A24B293D33EF009FACAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F98A24D293D33EF009FACAB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +67,8 @@
 				3F98A254293D33F0009FACAB /* Assets.xcassets */,
 				3F98A256293D33F0009FACAB /* LaunchScreen.storyboard */,
 				3F98A259293D33F0009FACAB /* Info.plist */,
+				3F65664A293ED33F00990969 /* DetailViewController.swift */,
+				3F65664C293ED35300990969 /* AddLocationViewController.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -140,7 +146,9 @@
 			files = (
 				3F98A250293D33EF009FACAB /* ViewController.swift in Sources */,
 				3F98A24C293D33EF009FACAB /* AppDelegate.swift in Sources */,
+				3F65664D293ED35300990969 /* AddLocationViewController.swift in Sources */,
 				3F98A24E293D33EF009FACAB /* SceneDelegate.swift in Sources */,
+				3F65664B293ED33F00990969 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
